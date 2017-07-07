@@ -1,3 +1,2 @@
-*.csv
 *.npy
 /node_modules
