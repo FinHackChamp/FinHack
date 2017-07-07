@@ -552,3 +552,121 @@ Epoch: 29 Train Metrics:
  rmse: 0.072 	 auc: 0.339 	 r2: 0.217 
 Epoch: 30 Train Metrics:
  rmse: 0.073 	 auc: 0.328 	 r2: 0.203 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.020 	 r2: 0.002 
+Epoch: 2 Train Metrics:
+ rmse: 0.081 	 auc: 0.038 	 r2: 0.009 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.021 	 r2: 0.003 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.019 	 r2: 0.002 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.021 	 r2: 0.002 
+Epoch: 2 Train Metrics:
+ rmse: 0.081 	 auc: 0.029 	 r2: 0.005 
+Epoch: 3 Train Metrics:
+ rmse: 0.081 	 auc: 0.048 	 r2: 0.014 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.020 	 r2: 0.002 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.021 	 r2: 0.002 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.021 	 r2: 0.002 
+Epoch: 2 Train Metrics:
+ rmse: 0.081 	 auc: 0.035 	 r2: 0.007 
+Epoch: 3 Train Metrics:
+ rmse: 0.081 	 auc: 0.049 	 r2: 0.015 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.021 	 r2: 0.002 
+Epoch: 2 Train Metrics:
+ rmse: 0.081 	 auc: 0.036 	 r2: 0.008 
+Epoch: 3 Train Metrics:
+ rmse: 0.081 	 auc: 0.050 	 r2: 0.016 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.020 	 r2: 0.002 
+Epoch: 2 Train Metrics:
+ rmse: 0.081 	 auc: 0.034 	 r2: 0.007 
+Epoch: 3 Train Metrics:
+ rmse: 0.081 	 auc: 0.050 	 r2: 0.016 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.021 	 r2: 0.002 
+Epoch: 2 Train Metrics:
+ rmse: 0.081 	 auc: 0.037 	 r2: 0.008 
+Epoch: 3 Train Metrics:
+ rmse: 0.081 	 auc: 0.050 	 r2: 0.015 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.022 	 r2: 0.002 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.020 	 r2: 0.002 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.021 	 r2: 0.002 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.020 	 r2: 0.002 
+Epoch: 2 Train Metrics:
+ rmse: 0.081 	 auc: 0.036 	 r2: 0.008 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.020 	 r2: 0.002 
+Epoch: 2 Train Metrics:
+ rmse: 0.081 	 auc: 0.036 	 r2: 0.008 
+Epoch: 3 Train Metrics:
+ rmse: 0.081 	 auc: 0.050 	 r2: 0.016 
+Epoch: 1 Train Metrics:
+ rmse: 0.081 	 auc: 0.020 	 r2: 0.001 
+Epoch: 2 Train Metrics:
+ rmse: 0.081 	 auc: 0.038 	 r2: 0.009 
+Epoch: 3 Train Metrics:
+ rmse: 0.081 	 auc: 0.051 	 r2: 0.016 
+Epoch: 4 Train Metrics:
+ rmse: 0.080 	 auc: 0.056 	 r2: 0.021 
+Epoch: 5 Train Metrics:
+ rmse: 0.080 	 auc: 0.060 	 r2: 0.024 
+Epoch: 6 Train Metrics:
+ rmse: 0.080 	 auc: 0.063 	 r2: 0.026 
+Epoch: 7 Train Metrics:
+ rmse: 0.080 	 auc: 0.068 	 r2: 0.028 
+Epoch: 8 Train Metrics:
+ rmse: 0.080 	 auc: 0.074 	 r2: 0.030 
+Epoch: 9 Train Metrics:
+ rmse: 0.080 	 auc: 0.082 	 r2: 0.033 
+Epoch: 10 Train Metrics:
+ rmse: 0.080 	 auc: 0.097 	 r2: 0.038 
+Epoch: 11 Train Metrics:
+ rmse: 0.080 	 auc: 0.113 	 r2: 0.043 
+Epoch: 12 Train Metrics:
+ rmse: 0.079 	 auc: 0.126 	 r2: 0.049 
+Epoch: 13 Train Metrics:
+ rmse: 0.079 	 auc: 0.147 	 r2: 0.058 
+Epoch: 14 Train Metrics:
+ rmse: 0.079 	 auc: 0.159 	 r2: 0.066 
+Epoch: 15 Train Metrics:
+ rmse: 0.078 	 auc: 0.173 	 r2: 0.073 
+Epoch: 16 Train Metrics:
+ rmse: 0.078 	 auc: 0.199 	 r2: 0.089 
+Epoch: 17 Train Metrics:
+ rmse: 0.077 	 auc: 0.209 	 r2: 0.097 
+Epoch: 18 Train Metrics:
+ rmse: 0.077 	 auc: 0.226 	 r2: 0.113 
+Epoch: 19 Train Metrics:
+ rmse: 0.076 	 auc: 0.239 	 r2: 0.122 
+Epoch: 20 Train Metrics:
+ rmse: 0.076 	 auc: 0.248 	 r2: 0.128 
+Epoch: 21 Train Metrics:
+ rmse: 0.075 	 auc: 0.268 	 r2: 0.148 
+Epoch: 22 Train Metrics:
+ rmse: 0.075 	 auc: 0.272 	 r2: 0.149 
+Epoch: 23 Train Metrics:
+ rmse: 0.075 	 auc: 0.284 	 r2: 0.161 
+Epoch: 24 Train Metrics:
+ rmse: 0.074 	 auc: 0.299 	 r2: 0.175 
+Epoch: 25 Train Metrics:
+ rmse: 0.074 	 auc: 0.293 	 r2: 0.171 
+Epoch: 26 Train Metrics:
+ rmse: 0.074 	 auc: 0.297 	 r2: 0.175 
+Epoch: 27 Train Metrics:
+ rmse: 0.074 	 auc: 0.301 	 r2: 0.180 
+Epoch: 28 Train Metrics:
+ rmse: 0.074 	 auc: 0.304 	 r2: 0.182 
+Epoch: 29 Train Metrics:
+ rmse: 0.073 	 auc: 0.310 	 r2: 0.188 
+Epoch: 30 Train Metrics:
+ rmse: 0.073 	 auc: 0.309 	 r2: 0.187 
