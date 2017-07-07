@@ -400,12 +400,7 @@ def predict():
             # print tf.get_collection(tf.GraphKeys.VARIABLES, scope='model')
             # print(session.run('model/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/biases/Adam:0'))   
             # log hyperparameters to results file
-            with open(result_file_path, "a+") as f:
-                print("Writing hyperparameters into file")
-                f.write("Hidden layer size: %d \n" % (FLAGS.hidden_size))
-                f.write("Dropout rate: %.3f \n" % (FLAGS.keep_prob))
-                f.write("Batch size: %d \n" % (config.batch_size))
-                f.write("Max grad norm: %d \n" % (FLAGS.max_grad_norm))
+            
             # saver = tf.train.Saver(tf.all_variables())
 
             cs = []
