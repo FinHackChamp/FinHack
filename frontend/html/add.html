@@ -18,16 +18,58 @@
           </div>
           <div>
             <label>Amount</label>
-            <input type="number" />
+            <input name="someid" type="number" onkeypress="return isNumberKey(event)"/><!--<p>HKD</p>-->
+            <script>
+              $(function isNumberKey(evt){
+                 var charCode = (evt.which) ? evt.which : event.keyCode
+                 if (charCode > 31 && (charCode < 48 || charCode > 57))
+                    return false;
+                 return true;
+              }
+              );
+            </script>
           </div>
           <div>
             <label>Account</label>
-            <input type="text" />
+            <!--<input type="text" />-->
+            <select>
+              <option value ="Mastercard">Mastercard 5566</option>
+              <option value = "Wallet">My Wallet</option>
+            </select>
           </div>
           <div>
             <label>Category</label>
+             <select>
+               <option value ="1">Beauty</option>
+                <option value = "2">Beverages</option>
+                <option value = "3">Education </option>
+                <option value ="4">Media</option>
+                <option value = "5">Grocery</option>
+                <option value = "6">Stationary</option>
+                <option value = "7">Investment</option>
+                <option value = "8">Dining</option>
+                <option value = "9">Transport</option>
+                <option value = "10">Entertainment</option>
+                <Option value = "11">Clothing</Option>
+             </select>
+            <!--select-->
+            <input type="text" onkeypress='validate(event)' />
+          </div>
+          <div>
+            <label>Date</label>
+            <input type ="date" id ="datepicker" >
+              <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+              <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+              <script>
+                $( function() {
+                  $( "#datepicker" ).datepicker();
+                   } );
+              </script>
+          <div>
+            <label>Description</label>
             <input type="text" />
           </div>
+
         </form>
       </div>
       <div class="modal-footer">
@@ -37,3 +79,4 @@
 
   </div>
 </div>
+
