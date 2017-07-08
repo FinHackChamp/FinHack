@@ -1,0 +1,23 @@
+<button type="button" class="btn btn-skin btn-lg" data-toggle="modal" data-target="#scanModal">Scan Receipt</button>
+
+<div id="scanModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Scan Receipt</h4>
+        </div>
+        <form action="/api/OCR" method="post" enctype="multipart/form-data">
+          <div class="modal-body">
+            <input type="file" name = "image"accept="image/*;capture=camera">
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-skin">Upload</button>
+            <!-- <input class="btn-skin" type="submit" value="Upload"> -->
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
