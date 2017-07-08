@@ -1,4 +1,20 @@
 <div id="monthlyDiagram" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+<table ng-if="!drilledDown">
+  <thead>
+    <th>Time</th>
+    <th>Company</th>
+    <th>Label</th>
+    <th>Amount</th>
+  </thead>
+  <tbody ng-repeat="label in labels">
+    <tr ng-repeat="record in transData">
+      <td>{{record.time | date:'yyyy-MMM-dd'}}</td>
+      <td>{{record.name}}</td>
+      <td>{{chosenLabel}}</td>
+      <td>{{record.amount}}</td>
+    </tr>
+  </tbody>
+</table>
 <table ng-if="drilledDown">
   <tr>
     <th>Time</th>
@@ -8,8 +24,8 @@
   </tr>
   <tr ng-repeat="record in recordList">
     <td>{{record.time | date:'yyyy-MMM-dd'}}</td>
-    <td>{{record.company}}</td>
-    <td>{{record.label}}</td>
+    <td>{{record.name}}</td>
+    <td>{{chosenLabel}}</td>
     <td>{{record.amount}}</td>
   </tr>
 </table>

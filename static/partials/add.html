@@ -2,7 +2,7 @@
 <button type="button" data-toggle="modal" data-target="#myModal"><img src = "static/pics/add.png" width="48"></button>
 
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
+<div ng-controller="AddCtrl" id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -22,7 +22,7 @@
           </div>
           <div class = 'modal-input'>
             <label style="background:#b6c0c9;" >Amount</label>
-            <input name="someid" type="number" onkeypress="return isNumberKey(event)"/><!--<p>HKD</p>-->
+            <input ng-model="addAmount" type="number" onkeypress="return isNumberKey(event)"/><!--<p>HKD</p>-->
             <script>
               $(function isNumberKey(evt){
                  var charCode = (evt.which) ? evt.which : event.keyCode
@@ -43,18 +43,10 @@
           </div>
           <div class = 'modal-input'>
             <label style="background: #b6c0c9;">Category</label>
-             <select>
-               <option value ="1">Beauty</option>
-                <option value = "2">Beverages</option>
-                <option value = "3">Education </option>
-                <option value ="4">Media</option>
-                <option value = "5">Grocery</option>
-                <option value = "6">Stationary</option>
-                <option value = "7">Investment</option>
-                <option value = "8">Dining</option>
-                <option value = "9">Transport</option>
-                <option value = "10">Entertainment</option>
-                <Option value = "11">Clothing</Option>
+             <select ng-model="addLabel">
+               <option ng-repeat="label in labels" value="{{label}}">
+                 {{label}}
+               </option>
                 <span style="display:inline-block; width: YOURWIDTH;"></span>
              </select>
             <!--select-->
@@ -62,7 +54,7 @@
           </div>
           <div class = 'modal-input'>
             <label style="background: #afafbf;">Date</label>
-            <input type ="date" id ="datepicker" >
+            <input ng-model="addTime" type ="date" id ="datepicker" >
               <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
               <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
               <script>
@@ -72,13 +64,13 @@
               </script> -->
           <div class = 'modal-input'>
             <label style ="background: #b6c0c9; ">Description</label>
-            <input type="text" />
+            <input ng-model="addDescription" type="text" />
           </div>
           <div class = "scan button" src = '/scan.html'></div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-skin" data-dismiss="modal">ADD</button>
+        <button type="submit" class="btn btn-skin" ng-click="submitForm()" ng-disabled="editForm.$invalid || isSaving" data-dismiss="modal">ADD</button>
       </div>
       <!-- <div class="modal-footer">
         <button type="button" class="btn btn-skin" data-dismiss="modal">ADD</button>
