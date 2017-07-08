@@ -16,12 +16,10 @@
     <!--[if lt IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <form action="/api/OCR" method="post" enctype="multipart/form-data">
-        <input type="file" name = "image"accept="image/*;capture=camera">
-        <input type="submit" value="Upload">
-    </form>
+
     <div ng-include src="'static/partials/navbar.html'"></div>
     <div ng-include src="'static/partials/add.html'"></div>
+    <div ng-include src="'static/partials/scan.html'"></div>
 
     <div ui-view="content"></div>
 
