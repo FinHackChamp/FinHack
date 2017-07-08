@@ -109,13 +109,5 @@ if __name__ == '__main__':
 		PORT = 5009
 
 	print('server running on ' + str(PORT), file=sys.stderr)
-<<<<<<< HEAD
-	# print(getPersonalAnalysis('Rachel Trujillo'), file=sys.stderr)
-    #os.system("python transaction_retriever.py")
-    #print('File loaded.')
-=======
-	os.system('python transaction_retriever.py')
-
->>>>>>> bc5f914a3e8992b444960f7cbc2ffbecf51da11d
 	socketio.run(app, port =  PORT, host= '0.0.0.0')
  	
