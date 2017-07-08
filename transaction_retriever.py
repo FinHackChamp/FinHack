@@ -4,8 +4,8 @@ import pandas as pd
 df = pd.read_csv('transaction.csv')
 labels = set(df['company label'])
 salary_segmentation = [10000,50000,100000,500000,1000000]
-print (labels)
-df
+
+
 
 
 # return personal info for each category
@@ -96,7 +96,7 @@ def getComparison(name, criteria , target='category'):
     print ('loaded')
     return output
    
-print getComparison('Rachel Trujillo', ['gender','age'], target='percentage')
+# print getComparison('Rachel Trujillo', ['gender','age'], target='percentage')
 
 
 

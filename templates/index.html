@@ -7,7 +7,7 @@
 
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="node_modules/angular-loading-bar/build/loading-bar.min.css">
-
+    
     <link rel="stylesheet" href="css/main.css">
     <link rel="shortcut icon" href="favicon.ico" />
 </head>
@@ -15,13 +15,17 @@
     <!--[if lt IE 9]>
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+    <form action="/api/OCR" method="post" enctype="multipart/form-data">
+        <input type="file" name = "image"accept="image/*;capture=camera">
+        <input type="submit" value="Upload">
+    </form>
     <div ng-include src="'html/navbar.html'"></div>
     <div ng-include src="'html/add.html'"></div>
     <div ng-include src="'html/diagram.html'"></div>
     <div ng-controller="TodoCtrl">
       {{totalTodos}}
     </div>
-
+    
     <noscript>
         <h1>You must enable javascript to view this page.</h1>
     </noscript>
@@ -34,6 +38,14 @@
 
     <script src="js/main.js"></script>
     <script src="js/todo.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+    <script> 
+         var socket = io();
+         socket.on('receipt', function(response){
+            console.log(response);
+         }) ;      
+         console.log('abc');
+    </script>
 </body>
 </html>
+
