@@ -19,7 +19,7 @@ def getPersonalAnalysis(name, detail = False, label='None'):
     # percentage among all ppl
 
     personal = df.loc[df['name'] == name, ['company name', 'company label', 'amount','time']]
-    print (label, file = sys.stderr)
+    # print (label, file = sys.stderr)
     output = []
     if label != 'None':
         currentList = []
@@ -29,7 +29,7 @@ def getPersonalAnalysis(name, detail = False, label='None'):
         data = []
         currentDf = personal.loc[personal['company label'] == label,['amount','company name','time']]
         amountList = list(currentDf['amount'])
-        print (amountList, file = sys.stderr)
+        # print (amountList)
         companyList = list(currentDf['company name'])
         for i in range(len(companyList)):
             smallSet = {}

@@ -120,8 +120,8 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
         drilldown: function(e) {
           console.log(e.point.name);
           socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: false, label: e.point.name}, function(data) {
-            console.log("2", data);
-            monthlyDiagram.addSeriesAsDrilldown(e.point, data);
+            console.log("2", data[0][0]);
+            monthlyDiagram.addSeriesAsDrilldown(e.point, data[0][0]);
           });
           showTable(e.point.name);
           $scope.$apply();

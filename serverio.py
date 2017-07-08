@@ -95,7 +95,7 @@ def connect():
 @socketio.on('getPersonalAnalysis')
 def handleAnalysis(message):
 	print (message, file = sys.stderr)
-
+	print ("-------------", file=sys.stderr)
 	print (getPersonalAnalysis(message['name'], message['detail'], message['label']), file=sys.stderr)
 	print ("-------------", file=sys.stderr)
 	return getPersonalAnalysis(message['name'], message['detail'], message['label'])
