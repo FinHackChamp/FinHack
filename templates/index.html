@@ -19,7 +19,6 @@
 
     <div ng-include src="'static/partials/navbar.html'"></div>
     <div ng-include src="'static/partials/add.html'"></div>
-    <div ng-include src="'static/partials/scan.html'"></div>
 
     <div ui-view="content"></div>
 
@@ -44,7 +43,7 @@
       socket.on('connect', function() {
           socket.emit('my event', {data: 'I\'m connected!'});
       });
-      
+
     </script>
 
     <script src="static/js/app.js"></script>

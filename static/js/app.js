@@ -8,7 +8,10 @@ socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: true, label: 
 
 var compData;
 var totalPrice;
-
+socket.on('receipt', function(response){
+  console.log(response);
+  totalPrice = response;
+});
 
 //Todo: Test this data
 /*
@@ -88,7 +91,7 @@ finhackApp.config(function($stateProvider) {
 //   socket.on('receipt', function(response){
 //       console.log(response)
 //       $scope.totalPrice = response['total']
-      
+
 //   })
 //   var add = function(){
 //     $scope.$apply()
@@ -252,4 +255,5 @@ finhackApp.controller('AddCtrl', ['$scope', function($scope) {
   $scope.showScanPane = function() {
     $scope.useScan = true;
   };
+
 }]);

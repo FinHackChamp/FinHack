@@ -90,7 +90,7 @@ def connect():
 		total = max(floatList)
 		print (total	)
 		socketio.emit('receipt', {'total': total})
-		return redirect('/')
+		return render_template('index.html')
 
 @socketio.on('getPersonalAnalysis')
 def handleAnalysis(message):
