@@ -2,7 +2,7 @@ var finhackApp = angular.module('finhackApp', ['ui.router']);
 
 var transData;
 socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: true, label: 'None'}, function(data) {
-  console.log("1", data);
+  console.log(data);
   transData = data;
 });
 
@@ -42,6 +42,9 @@ socket.emit('coupon', function(data) {
   prediction = data;
 });
 
+var labels = ['Beauty', 'Beverages', 'Education', 'Media', 'Grocery', 'Stationary',
+'Investment', 'Dining', 'Transport', 'Entertainment', 'Clothing'];
+
 finhackApp.config(function($stateProvider) {
   $stateProvider.state('home', {
     url: '/',
@@ -69,24 +72,7 @@ finhackApp.config(function($stateProvider) {
         controller: 'CouponCtrl'
       }
     }
-  })
-  .state('add', {
-    url: '/add',
-    onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-      $uibModal.open({
-          templateUrl: 'static/partials/add.html',
-          //controller: 'BondDialogController',
-          //controllerAs: 'vm',
-          backdrop: 'static',
-          size: 'lg'
-      }).result.then(function() {
-          $state.go('home', null, { reload: 'home' });
-      }, function() {
-          $state.go('home');
-      });
-    }]
   });
-
 });
 
 
@@ -128,6 +114,7 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
 
     //Todo: get transaction data by category
     $scope.recordList = transData[label];
+    console.log("recordList", transData[label]);
   }
 
   monthlyDiagram = Highcharts.chart('monthlyDiagram', {
@@ -143,6 +130,7 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
             console.log("2", data[0][0]);
             monthlyDiagram.addSeriesAsDrilldown(e.point, data[0][0]);
           });
+          $scope.chosenLabel = e.point.name;
           showTable(e.point.name);
           $scope.$apply();
         },
@@ -246,4 +234,15 @@ finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
         }
     }]
   });
+}]);
+
+finhackApp.controller('AddCtrl', ['$scope', function($scope) {
+  $scope.submitForm = function() {
+    transData[$scope.addLabel].push({
+      amount: $scope.addAmount,
+      name: $scope.addDescription,
+      time: $scope.addTime
+    });
+    //console.log("Pushed", transData);
+  };
 }]);
