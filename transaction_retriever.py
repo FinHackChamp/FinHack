@@ -11,12 +11,31 @@ salary_segmentation = [10000,50000,100000,500000,1000000]
 # return personal info for each category
 # [{'amount': 922.05999999999995, 'drilldown': 'Grocery', 'name': 'Grocery'}, {...}]
 
-def getPersonalAnalysis(name, detail = False):
+
+def getPersonalAnalysis(name, detail = False, label=None):
     # percentage among all ppl
     
     personal = df.loc[df['name'] == name, ['company name', 'company label', 'amount','time']]
     
     output = []
+    if label is not None:
+        currentList = []
+        currentSet ={}
+        currentSet['name'] = label
+        currentSet['id'] = label
+        data = []
+        currentDf = personal.loc[personal['company label'] == label,['amount','company name','time']]
+        amountList = list(currentDf['amount'])
+        companyList = list(currentDf['company name'])
+        for i in range(len(companyList)):
+            smallSet = {}
+            smallSet['name'] = companyList[i]
+            smallSet['y'] = amountList[i]
+            data.append(smallSet)
+        currentSet['data'] = data
+        currentList.append(currentSet)
+    output.append(currentList)
+    return output
     if not detail:
         for label in labels:
             amount = sum(personal.loc[personal['company label'] == label,'amount'])
@@ -38,7 +57,7 @@ def getPersonalAnalysis(name, detail = False):
                 currentList.append(currentTransaction)
             output[label] = currentList
     return output
-getPersonalAnalysis('Rachel Trujillo',detail = True)
+# getPersonalAnalysis('Rachel Trujillo',detail = True, label='Beauty')
 # getPersonalAnalysis('Rachel Trujillo')
 
 
