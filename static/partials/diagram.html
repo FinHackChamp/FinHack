@@ -6,11 +6,12 @@
     <th>Label</th>
     <th>Amount</th>
   </thead>
+
   <tbody ng-repeat="label in labels">
-    <tr ng-repeat="record in transData">
+    <tr ng-repeat="record in transData[label]">
       <td>{{record.time | date:'yyyy-MMM-dd'}}</td>
       <td>{{record.name}}</td>
-      <td>{{chosenLabel}}</td>
+      <td>{{label}}</td>
       <td>{{record.amount}}</td>
     </tr>
   </tbody>

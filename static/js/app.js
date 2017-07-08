@@ -79,18 +79,18 @@ finhackApp.config(function($stateProvider) {
 
 
 
-finhackApp.controller('AddCtrl', ['$scope', function($scope){
-  // $scope.totalPrice = totalPrice
-  console.log('here')
-  socket.on('receipt', function(response){
-      console.log(response)
-      $scope.totalPrice = response['total']
+// finhackApp.controller('AddCtrl', ['$scope', function($scope){
+//   // $scope.totalPrice = totalPrice
+//   console.log('here')
+//   socket.on('receipt', function(response){
+//       console.log(response)
+//       $scope.totalPrice = response['total']
       
-  })
-  var add = function(){
-    $scope.$apply()
-  }
-}]);
+//   })
+//   var add = function(){
+//     $scope.$apply()
+//   }
+// }]);
 
 
 finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
@@ -107,7 +107,8 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
         data: data
     });
   });
-
+  $scope.transData = transData;
+  $scope.labels = labels;
   function showTable (label) {
     $scope.drilledDown = true;
     $scope.chosenLabel = label;
