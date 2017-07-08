@@ -91,18 +91,18 @@ def connect():
 		return redirect('/')
 
 @socketio.on('getPersonalAnalysis')
-def handleAnalysis(name):
-	print (getPersonalAnalysis(name))
+def handleAnalysis(message):
+	print (getPersonalAnalysis(message['name'], message['detail']), file=sys.stderr)
+	return getPersonalAnalysis(message['name'], message['detail'])
 
 @socketio.on('getComparison')
-def handleComparison(name, criteria):
-	return getComparison(name, criteria)
+def handleComparison(res):
+	return getComparison(res['name'], res['criteria'], res['target'])
 
 @socketio.on('coupon')
 def coupon():
 	print(predict())
 	return predict()
-
 
 @app.route('/')
 def index():

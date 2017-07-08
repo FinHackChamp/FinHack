@@ -1,7 +1,11 @@
 var finhackApp = angular.module('finhackApp', ['ui.router']);
 
+var transData;
+socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: true}, function(data) {
+  transData = data;
+});
 
-compData = [];
+var compData;
 
 //Todo: Test this data
 /*
@@ -32,8 +36,8 @@ socket.emit('getComparison', {name: 'Charles Davis', criteria: 'salary', target:
 
 var prediction;
 socket.emit('coupon', function(data) {
-    prediction = data;
-  });
+  prediction = data;
+});
 
 finhackApp.config(function($stateProvider) {
   $stateProvider.state('home', {
@@ -88,7 +92,7 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
   //var title = moment().format("YYYY MMM");
 
   //Todo: Change the name to user name!
-  socket.emit('getPersonalAnalysis', {name: 'Charles Davis'}, function(data) {
+  socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: false}, function(data) {
     console.log(data);
     monthlyData = data;
     monthlyDiagram.addSeries({
@@ -100,19 +104,8 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
   function showTable (label) {
     $scope.drilledDown = true;
     $scope.chosenLabel = label;
-
     //Todo: get transaction data by category
-    $scope.recordList = [{
-      time: new Date(),
-      company: "Bullshit Co.",
-      label: label,
-      amount: 201.22
-    }, {
-      time: new Date(),
-      company: "Apple Inc.",
-      label: label,
-      amount: 340.66
-    }];
+    $scope.recordList = transData[label];
   }
 
   monthlyDiagram = Highcharts.chart('monthlyDiagram', {
@@ -140,6 +133,8 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
     tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
     },
+    colors: ['#DAB6C4', '#7B886F', '#B4DC7F', '#FEFFA5', '#FFA0AC', '#ED6A5A', '#F4F1BB',
+    '#9BC1BC', '#5CA4A9', '#FFA0AC', '#E6EBE0', '#5CA4A9', '#FFE5D9', '#9D8189'],
     plotOptions: {
         pie: {
             allowPointSelect: true,
@@ -147,14 +142,12 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
             dataLabels: {
                 enabled: false
             },
-            showInLegend: true,
-            colors: ['#DAB6C4', '#7B886F', '#B4DC7F', '#FEFFA5', '#FFA0AC', '#ED6A5A', '#F4F1BB',
-            '#9BC1BC', '#5CA4A9', '#FFA0AC', '#E6EBE0', '#5CA4A9', '#FFE5D9', '#9D8189']
+            showInLegend: true
         }
     },
     series: [],
     drilldown: {
-      series: [{
+      series: [[{
         //Todo: get Data!
         name: 'Education Details',
         id: 'Education',
@@ -168,14 +161,14 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
           name: '2U, Inc.',
           y: 280.35
         }]
-      }]
+      }]]
     }
   });
 }]);
 
 finhackApp.controller('CouponCtrl', ['$scope', function($scope) {
 
-  $scope.prediction = prediction
+  $scope.prediction = prediction;
 
 }]);
 
@@ -218,10 +211,11 @@ finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
     legend: {
         enabled: false
     },
+    colors: ['#b3d3cf', '#5CA4A9'],
     plotOptions: {
-        series: {
-            stacking: 'percent'
-        }
+      series: {
+        stacking: 'percent'
+      }
     },
     series: [{
         name: 'Others',
@@ -234,9 +228,9 @@ finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
         name: 'You',
         data: [0.8, 0.6, 0.2, 0.7],
         dataLabels: {
-            enabled: true,
-            align: 'right',
-            format: '<b>{point.percentage:.1f}%</b>'
+          enabled: true,
+          align: 'right',
+          format: '<b>{point.percentage:.1f}%</b>'
         }
     }]
   });
