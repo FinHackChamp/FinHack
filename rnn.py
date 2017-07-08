@@ -419,9 +419,10 @@ def predict():
             return output
 
 
-if __name__ == "__main__":
-    # train()
-    print predict()
+# if __name__ == "__main__":
+#     print()
+#     # train()
+    # print predict()
     # train(train= False)
     
 

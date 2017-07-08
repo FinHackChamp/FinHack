@@ -1,5 +1,8 @@
 var finhackApp = angular.module('finhackApp', ['ui.router']);
-
+var prediction;
+socket.emit('coupon', function(data) {
+    prediction = data;
+  });
 finhackApp.config(function($stateProvider) {
   $stateProvider.state('home', {
     url: '/',
@@ -23,7 +26,8 @@ finhackApp.config(function($stateProvider) {
     url: '/coupon',
     views: {
       content: {
-        templateUrl: '/static/partials/coupon.html'
+        templateUrl: '/static/partials/coupon.html',
+        controller: 'CouponCtrl'
       }
     }
   })
@@ -48,9 +52,11 @@ finhackApp.config(function($stateProvider) {
 
 finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
   //Todo: Get data
+
   socket.emit('getPersonalAnalysis', {name: 'Rachel Trujillo'}, function(data) {
     console.log(data);
   });
+  
   var jsonData = [{
     name: 'Education',
     y: 112.22,
@@ -141,6 +147,11 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
       }]
     }
   });
+}]);
+finhackApp.controller('CouponCtrl', ['$scope', function($scope) {
+  
+  $scope.prediction = prediction
+  
 }]);
 
 finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
