@@ -7,6 +7,8 @@ socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: true, label: 
 });
 
 var compData;
+var totalPrice;
+
 
 //Todo: Test this data
 /*
@@ -76,6 +78,24 @@ finhackApp.config(function($stateProvider) {
   });
 });
 
+
+
+
+
+// finhackApp.controller('AddCtrl', ['$scope', function($scope){
+//   // $scope.totalPrice = totalPrice
+//   console.log('here')
+//   socket.on('receipt', function(response){
+//       console.log(response)
+//       $scope.totalPrice = response['total']
+      
+//   })
+//   var add = function(){
+//     $scope.$apply()
+//   }
+// }]);
+
+
 finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
   var monthlyData;
   var title = "Summary of the Past 30 Days"
@@ -90,7 +110,8 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
         data: data
     });
   });
-
+  $scope.transData = transData;
+  $scope.labels = labels;
   function showTable (label) {
     $scope.drilledDown = true;
     $scope.chosenLabel = label;

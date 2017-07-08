@@ -1,9 +1,10 @@
+<<<<<<< HEAD
 <button type="button" data-toggle="modal" data-target="#addModal"><img src = "static/pics/add.png" width="48"></button>
 
 <!-- Modal -->
 <div ng-controller="AddCtrl" id="addModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
 
+  <div class="modal-dialog">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -21,7 +22,9 @@
           </div>
           <div class = 'modal-input'>
             <label style="background:#b6c0c9;" >Amount</label>
+
             <input ng-model="addAmount" type="number" onkeypress="return isNumberKey(event)"/><!--<p>HKD</p>-->
+
             <script>
               $(function isNumberKey(evt){
                  var charCode = (evt.which) ? evt.which : event.keyCode
