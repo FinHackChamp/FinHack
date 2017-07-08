@@ -1,7 +1,20 @@
+
+<!--
 <div>
   <input type="radio" ng-model="chosenGroup" ng-change="onChosenGroupChange()" name="chooseGroup" value="age" checked/>Age
   <input type="radio" ng-model="chosenGroup" ng-change="onChosenGroupChange()" name="chooseGroup" value="salary"/>Salary
 </div>
-<div>
-  <div id="comparisonDiagram" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+-->
+<div class="container" align=center style="width:65%;">
+  <div class="row">
+    <div id="comparisonDiagram"  style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+  </div>
+  <div class="row">
+    <div class="input-radio col-md-4">
+      <input id="age-toggle" ng-model="chosenGroup" ng-change="onChosenGroupChange()" class="toggle toggle-left" name="toggle" value="age" type="radio">
+      <label for="age-toggle" class="btn-toggle">Age</label>
+      <input id="salary-toggle" ng-model="chosenGroup" ng-change="onChosenGroupChange()" class="toggle toggle-right" name="toggle" value="salary" type="radio">
+      <label for="salary-toggle" class="btn-toggle">Salary</label>
+    </div>
+  </div>
 </div>
