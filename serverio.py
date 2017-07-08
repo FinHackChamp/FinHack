@@ -1,6 +1,7 @@
 from __future__ import print_function
 from flask import Flask, render_template,request
 from flask_socketio import SocketIO
+import os
 import transaction_retriever
 from werkzeug import secure_filename
 from OCR import *
@@ -17,11 +18,11 @@ import re
 
 
 def is_number(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
+	try:
+		float(s)
+		return True
+	except ValueError:
+		return False
 
 @socketio.on('message')
 def handle_message(message):
@@ -85,11 +86,11 @@ def connect():
 
 @socketio.on('getPersonalAnalysis')
 def handleAnalysis(name):
-    return getPersonalAnalysis(name)
+	return getPersonalAnalysis(name)
 
 @socketio.on('getComparison')
 def handleComparison(name, criteria):
-    return getComparison(name, criteria)
+	return getComparison(name, criteria)
 
 @app.route('/')
 def index():
@@ -103,6 +104,6 @@ if __name__ == '__main__':
 		PORT = 5009
 
 	print('server running on ' + str(PORT), file=sys.stderr)
-    #os.system("python transaction_retriever.py")
-    #print('File loaded.')
+	os.system('python transaction_retriever.py')
+
 	socketio.run(app, port =  PORT, host= '0.0.0.0')
