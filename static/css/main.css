@@ -264,7 +264,6 @@ Navigation
 .navbar {
     margin-bottom: 0;
     border-bottom: 1px solid rgba(255,255,255,.3);
-
 }
 
 
@@ -314,7 +313,6 @@ Navigation
 
 .navbar.navbar-custom.top-nav-collapse {
 	background: #fff;
-
 }
 
 .navbar-custom.top-nav-collapse ul.nav li a {
@@ -927,7 +925,6 @@ input[type="radio"].toggle:checked + label:after {
 	text-shadow: 0 0 1px rgba(255,255,255,0.3);
 	/*font-size: 14px;*/
 	font-weight: 700;
-
 }
 
 .btn.btn-noradius {
