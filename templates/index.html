@@ -44,9 +44,7 @@
       socket.on('connect', function() {
           socket.emit('my event', {data: 'I\'m connected!'});
       });
-      socket.on('receipt', function(response){
-            console.log(response)
-      })
+      
     </script>
 
     <script src="static/js/app.js"></script>

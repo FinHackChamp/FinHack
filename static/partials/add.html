@@ -1,10 +1,11 @@
 
-<button type="button" class="btn btn-skin" data-toggle="modal" data-target="#myModal"><img src = "../pics/add.png" width="48"></button>
+<!-- <button ng-controller='AddCtrl' ng-click='add()' type="button" class="btn btn-skin" data-toggle="modal" data-target="#myModal"><img src = "../pics/add.png" width="48"></button> -->
+<button ui-sref="/add"><img src = "../pics/add.png" width="48"></button>
 
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="myModal" class="modal fade" role="dialog" ng-controller="AddCtrl">
   <div class="modal-dialog">
-
+    
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
@@ -22,7 +23,7 @@
           </div>
           <div class = 'modal-input'>
             <label style="background:#b6c0c9;" >Amount</label>
-            <input name="someid" type="number" onkeypress="return isNumberKey(event)"/><!--<p>HKD</p>-->
+            <input name="someid" type="number" ng-model="totalPrice" onkeypress="return isNumberKey(event)"/><!--<p>HKD</p>-->
             <script>
               $(function isNumberKey(evt){
                  var charCode = (evt.which) ? evt.which : event.keyCode
