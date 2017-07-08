@@ -68,7 +68,7 @@ def api_facility():
 def connect():
 	@app.route('/api/OCR', methods = ['POST'])
 	def OCR():
-	
+
 		f = request.files['image']
 		f.save(secure_filename('receipt.jpg'))
 		print (ocr_space_file(filename='receipt.jpg').split('\r\n'), file=sys.stderr)
@@ -79,9 +79,17 @@ def connect():
 				floatList.append(float(word))
 			print (word)
 		total = max(floatList)
-		print (total	)	
+		print (total	)
 		socketio.emit('receipt', {'total': total})
 		return render_template("index.html")
+
+@socketio.on('getPersonalAnalysis')
+def handleAnalysis(name):
+    return getPersonalAnalysis(name)
+
+@socketio.on('getComparison')
+def handleComparison(name, criteria):
+    return getComparison(name, criteria)
 
 @app.route('/')
 def index():
@@ -95,6 +103,6 @@ if __name__ == '__main__':
 		PORT = 5009
 
 	print('server running on ' + str(PORT), file=sys.stderr)
-
+    #os.system("python transaction_retriever.py")
+    #print('File loaded.')
 	socketio.run(app, port =  PORT, host= '0.0.0.0')
-

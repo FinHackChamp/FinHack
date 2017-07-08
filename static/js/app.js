@@ -1,17 +1,11 @@
 var finhackApp = angular.module('finhackApp', ['ui.router']);
 
-var socket = io.connect('http://' + document.domain + ':' + location.port);
-socket.on('connect', function() {
-    socket.emit('my event', {data: 'I\'m connected!'});
-});
-
-finhackApp.config(function($stateProvider, $locationProvider) {
-  $locationProvider.hashPrefix('!');
+finhackApp.config(function($stateProvider) {
   $stateProvider.state('home', {
     url: '/',
     views: {
       content: {
-        templateUrl: 'html/diagram.html',
+        templateUrl: '/static/partials/diagram.html',
         controller: 'DiagramCtrl'
       }
     }
@@ -20,7 +14,7 @@ finhackApp.config(function($stateProvider, $locationProvider) {
     url: '/statistics',
     views: {
       content: {
-        templateUrl: 'html/statistics.html',
+        templateUrl: '../static/partials/statistics.html',
         controller: 'StatisticsCtrl'
       }
     }
@@ -29,7 +23,7 @@ finhackApp.config(function($stateProvider, $locationProvider) {
     url: '/coupon',
     views: {
       content: {
-        templateUrl: 'html/coupon.html'
+        templateUrl: '../static/partials/coupon.html'
       }
     }
   })
@@ -37,7 +31,7 @@ finhackApp.config(function($stateProvider, $locationProvider) {
     url: '/add',
     onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
       $uibModal.open({
-          templateUrl: 'html/add.html',
+          templateUrl: 'static/partials/add.html',
           //controller: 'BondDialogController',
           //controllerAs: 'vm',
           backdrop: 'static',
@@ -53,6 +47,10 @@ finhackApp.config(function($stateProvider, $locationProvider) {
 });
 
 finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
+  //Todo: Get data
+  socket.emit('getPersonalAnalysis', {name: 'Rachel Trujillo'}, function(data) {
+    console.log(data);
+  });
   var jsonData = [{
     name: 'Education',
     y: 112.22,
