@@ -1,3 +1,4 @@
+from __future__ import print_function
 import numpy as numpy
 import pandas as pd
 
@@ -14,13 +15,13 @@ salary_segmentation = [10000,50000,100000,500000,1000000]
 
 
 
-def getPersonalAnalysis(name, detail = False, label=None):
+def getPersonalAnalysis(name, detail = False, label='None'):
     # percentage among all ppl
 
     personal = df.loc[df['name'] == name, ['company name', 'company label', 'amount','time']]
-
+    print (label, file = sys.stderr)
     output = []
-    if label is not None:
+    if label != 'None':
         currentList = []
         currentSet ={}
         currentSet['name'] = label
@@ -28,6 +29,7 @@ def getPersonalAnalysis(name, detail = False, label=None):
         data = []
         currentDf = personal.loc[personal['company label'] == label,['amount','company name','time']]
         amountList = list(currentDf['amount'])
+        print (amountList, file = sys.stderr)
         companyList = list(currentDf['company name'])
         for i in range(len(companyList)):
             smallSet = {}
@@ -36,8 +38,8 @@ def getPersonalAnalysis(name, detail = False, label=None):
             data.append(smallSet)
         currentSet['data'] = data
         currentList.append(currentSet)
-    output.append(currentList)
-    return output
+        output.append(currentList)
+        return output
 
     if not detail:
         for label in labels:

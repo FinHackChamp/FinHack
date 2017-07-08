@@ -94,8 +94,11 @@ def connect():
 
 @socketio.on('getPersonalAnalysis')
 def handleAnalysis(message):
-	print (getPersonalAnalysis(message['name'], message['detail']), file=sys.stderr)
-	return getPersonalAnalysis(message['name'], message['detail'])
+	print (message, file = sys.stderr)
+
+	print (getPersonalAnalysis(message['name'], message['detail'], message['label']), file=sys.stderr)
+	print ("-------------", file=sys.stderr)
+	return getPersonalAnalysis(message['name'], message['detail'], message['label'])
 
 @socketio.on('getComparison')
 def handleComparison(res):

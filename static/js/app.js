@@ -1,7 +1,8 @@
 var finhackApp = angular.module('finhackApp', ['ui.router']);
 
 var transData;
-socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: true}, function(data) {
+socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: true, label: 'None'}, function(data) {
+  console.log("1", data);
   transData = data;
 });
 
@@ -92,7 +93,7 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
   //var title = moment().format("YYYY MMM");
 
   //Todo: Change the name to user name!
-  socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: false}, function(data) {
+  socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: false, label: 'None'}, function(data) {
     console.log(data);
     monthlyData = data;
     monthlyDiagram.addSeries({
@@ -118,6 +119,10 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
       events: {
         drilldown: function(e) {
           console.log(e.point.name);
+          socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: false, label: e.point.name}, function(data) {
+            console.log("2", data);
+            monthlyDiagram.addSeriesAsDrilldown(e.point, data);
+          });
           showTable(e.point.name);
           $scope.$apply();
         },
@@ -146,25 +151,9 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
             showInLegend: true
         }
     },
-    series: [{
-      name: title,
-      data: jsonData
-    }],
+    series: [],
     drilldown: {
-      series: [{
-        name: 'Education Details',
-        id: 'Education',
-        data: [{
-          name: 'Coursera Inc.',
-          y: 111.22
-        }, {
-          name: 'Pearson plc',
-          y: 47.68
-        }, {
-          name: '2U, Inc.',
-          y: 280.35
-        }]
-      }]]
+      series: []
     }
   });
 }]);
