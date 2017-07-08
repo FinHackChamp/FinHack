@@ -161,7 +161,7 @@ finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
         }
     },
     legend: {
-        reversed: true
+        enabled: false
     },
     plotOptions: {
         series: {
@@ -173,7 +173,12 @@ finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
         data: [0.2, 0.4, 0.8, 0.3]
     }, {
         name: 'You',
-        data: [0.8, 0.6, 0.2, 0.7]
+        data: [0.8, 0.6, 0.2, 0.7],
+        dataLabels: {
+            enabled: true,
+            align: 'right',
+            format: '<b>{point.percentage:.1f}%</b>'
+        }
     }]
   });
 
