@@ -1,5 +1,10 @@
 var finhackApp = angular.module('finhackApp', ['ui.router']);
 
+var socket = io.connect('http://' + document.domain + ':' + location.port);
+socket.on('connect', function() {
+    socket.emit('my event', {data: 'I\'m connected!'});
+});
+
 finhackApp.config(function($stateProvider, $locationProvider) {
   $locationProvider.hashPrefix('!');
   $stateProvider.state('home', {
