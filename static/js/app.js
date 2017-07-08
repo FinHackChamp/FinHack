@@ -47,25 +47,19 @@ finhackApp.config(function($stateProvider) {
 });
 
 finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
-  //Todo: Get data
-  socket.emit('getPersonalAnalysis', {name: 'Rachel Trujillo'}, function(data) {
-    console.log(data);
-  });
-  var jsonData = [{
-    name: 'Education',
-    y: 112.22,
-    drilldown: 'Education'
-  }, {
-    name: 'Media',
-    y: 50.34,
-    drilldown: 'Media'
-  }, {
-    name: 'Investment',
-    y: 20.96,
-    drilldown: 'Investment'
-  }];
+  var monthlyData;
+  var title = "Summary of the Past 30 Days"
+  //var title = moment().format("YYYY MMM");
 
-  var title = moment().format("YYYY MMM");
+  //Todo: Change the name to user name!
+  socket.emit('getPersonalAnalysis', {name: 'Charles Davis'}, function(data) {
+    console.log(data);
+    monthlyData = data;
+    monthlyDiagram.addSeries({
+        name: title,
+        data: data
+    });
+  });
 
   function showTable (label) {
     $scope.drilledDown = true;
@@ -120,12 +114,10 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
             showInLegend: true
         }
     },
-    series: [{
-      name: title,
-      data: jsonData
-    }],
+    series: [],
     drilldown: {
       series: [{
+        //Todo: get Data!
         name: 'Education Details',
         id: 'Education',
         data: [{

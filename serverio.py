@@ -84,12 +84,12 @@ def connect():
 		return render_template("index.html")
 
 @socketio.on('getPersonalAnalysis')
-def handleAnalysis(name):
-    return getPersonalAnalysis(name)
+def handleAnalysis(message):
+    return getPersonalAnalysis(message['name'])
 
 @socketio.on('getComparison')
-def handleComparison(name, criteria):
-    return getComparison(name, criteria)
+def handleComparison(message):
+    return getComparison(message['name'], message['criteria'])
 
 @app.route('/')
 def index():
