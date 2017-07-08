@@ -14,7 +14,7 @@ finhackApp.config(function($stateProvider) {
     url: '/statistics',
     views: {
       content: {
-        templateUrl: '../static/partials/statistics.html',
+        templateUrl: '/static/partials/statistics.html',
         controller: 'StatisticsCtrl'
       }
     }
@@ -23,7 +23,7 @@ finhackApp.config(function($stateProvider) {
     url: '/coupon',
     views: {
       content: {
-        templateUrl: '../static/partials/coupon.html'
+        templateUrl: '/static/partials/coupon.html'
       }
     }
   })
