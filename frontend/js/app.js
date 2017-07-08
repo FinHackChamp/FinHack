@@ -20,6 +20,14 @@ finhackApp.config(function($stateProvider, $locationProvider) {
       }
     }
   })
+  .state('coupon', {
+    url: '/coupon',
+    views: {
+      content: {
+        templateUrl: 'html/coupon.html'
+      }
+    }
+  })
   .state('add', {
     url: '/add',
     onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
@@ -74,7 +82,7 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
     }];
   }
 
-  Highcharts.chart('monthlyDiagram', {
+  monthlyDiagram = Highcharts.chart('monthlyDiagram', {
     chart: {
       plotBackgroundColor: null,
       plotBorderWidth: null,
@@ -134,4 +142,44 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
 
 finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
 
+  $scope.chosenGroup = 'age';
+
+  comparisonDiagram = Highcharts.chart('comparisonDiagram', {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: 'Comparison with people of your ' + $scope.chosenGroup
+    },
+    xAxis: {
+        categories: ['Education', 'Media', 'Investment', 'Grocery']
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Percentage among group'
+        }
+    },
+    legend: {
+        reversed: true
+    },
+    plotOptions: {
+        series: {
+            stacking: 'percent'
+        }
+    },
+    series: [{
+        name: 'Others',
+        data: [0.2, 0.4, 0.8, 0.3]
+    }, {
+        name: 'You',
+        data: [0.8, 0.6, 0.2, 0.7]
+    }]
+  });
+
+  $scope.onChosenGroupChange = function() {
+    comparisonDiagram.setTitle({
+      text: 'Comparison with people of your ' + $scope.chosenGroup
+    });
+  }
 }]);
