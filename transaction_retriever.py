@@ -12,12 +12,32 @@ salary_segmentation = [10000,50000,100000,500000,1000000]
 # [{'amount': 922.05999999999995, 'drilldown': 'Grocery', 'name': 'Grocery'}, {...}]
 
 
-def getPersonalAnalysis(name, detail = False):
+
+def getPersonalAnalysis(name, detail = False, label=None):
     # percentage among all ppl
 
     personal = df.loc[df['name'] == name, ['company name', 'company label', 'amount','time']]
 
     output = []
+    if label is not None:
+        currentList = []
+        currentSet ={}
+        currentSet['name'] = label
+        currentSet['id'] = label
+        data = []
+        currentDf = personal.loc[personal['company label'] == label,['amount','company name','time']]
+        amountList = list(currentDf['amount'])
+        companyList = list(currentDf['company name'])
+        for i in range(len(companyList)):
+            smallSet = {}
+            smallSet['name'] = companyList[i]
+            smallSet['y'] = amountList[i]
+            data.append(smallSet)
+        currentSet['data'] = data
+        currentList.append(currentSet)
+    output.append(currentList)
+    return output
+
     if not detail:
         for label in labels:
             amount = sum(personal.loc[personal['company label'] == label,'amount'])
@@ -39,7 +59,8 @@ def getPersonalAnalysis(name, detail = False):
                 currentList.append(currentTransaction)
             output[label] = currentList
     return output
-getPersonalAnalysis('Rachel Trujillo',detail = True)
+
+# getPersonalAnalysis('Rachel Trujillo',detail = True, label='Beauty')
 # getPersonalAnalysis('Rachel Trujillo')
 
 
@@ -47,6 +68,7 @@ getPersonalAnalysis('Rachel Trujillo',detail = True)
 # criteria: a list ['gender', 'age','salary']
 # target: if == 'category', only return average spending for each category
 #
+
 # return: [{'amount': 154.95960794655397, 'drilldown': 'Grocery', 'name': 'Grocery'}, {...}]
 #		  if == 'percentage', return total number, percentage and index in the group, and the list of amount of spending for
 #                each people in each category
@@ -81,6 +103,7 @@ def getComparison(name, criteria , target='category'):
         print(highThresh)
 
         if lowThresh is not None:
+            print ('fff')
             selectedDf = selectedDf.loc[selectedDf['salary'] >= lowThresh]
         if highThresh is not None:
 
@@ -100,9 +123,7 @@ def getComparison(name, criteria , target='category'):
             amount = sum(selectedDf.loc[selectedDf['company label'] == label,'amount'])/len(selectedDf.loc[selectedDf['company label'] == label,'amount'])
             output.append({'name': label, 'amount': amount, 'drilldown':label})
 
-
         elif target == 'percentage':
-
 
             output['total_people'] = num_people
             amountList = []
@@ -120,3 +141,5 @@ def getComparison(name, criteria , target='category'):
             output[label] = {'index':index, 'percentage': (index+0.0)/ num_people, 'amount_list':amountList}
     print ('loaded')
     return output
+
+# print getComparison('Rachel Trujillo', ['gender','age'], target='percentage')

@@ -145,10 +145,12 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
             showInLegend: true
         }
     },
-    series: [],
+    series: [{
+      name: title,
+      data: jsonData
+    }],
     drilldown: {
-      series: [[{
-        //Todo: get Data!
+      series: [{
         name: 'Education Details',
         id: 'Education',
         data: [{

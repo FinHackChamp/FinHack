@@ -341,7 +341,6 @@ def predict():
     result_file_path = "run_logs_{}".format(timestamp)
 
 
-
     train_max_num_problems, train_max_skill_num = (40, 150)
     train_students = np.array([np.load('oneHotEncoded.npy')[np.random.randint(2975),:,:]])
     # train_students = np.load('oneHotEncoded.npy')
