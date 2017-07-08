@@ -1,8 +1,7 @@
-
-<button type="button" data-toggle="modal" data-target="#myModal"><img src = "static/pics/add.png" width="48"></button>
+<button type="button" data-toggle="modal" data-target="#addModal"><img src = "static/pics/add.png" width="48"></button>
 
 <!-- Modal -->
-<div ng-controller="AddCtrl" id="myModal" class="modal fade" role="dialog">
+<div ng-controller="AddCtrl" id="addModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
     <!-- Modal content-->
@@ -32,6 +31,18 @@
               }
               );
             </script>
+            <button id="scanBtn" ng-click="showScanPane()"><img src="static/pics/barcode.png" style="width: 40px; height: 40px;"></button>
+            <well ng-if="useScan">
+              <form action="/api/OCR" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                  <input type="file" name = "image"accept="image/*;capture=camera">
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-skin">Upload</button>
+                  <!-- <input class="btn-skin" type="submit" value="Upload"> -->
+                </div>
+              </form>
+            </well>
           </div>
           <div class = 'modal-input'>
             <label style ="background: #cbdbda; ">Account</label>
@@ -66,15 +77,12 @@
             <label style ="background: #b6c0c9; ">Description</label>
             <input ng-model="addDescription" type="text" />
           </div>
-          <div class = "scan button" src = '/scan.html'></div>
+          <button type="button" class="btn btn-skin btn-lg" data-toggle="modal" data-target="#scanModal">Scan Receipt</button>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-skin" ng-click="submitForm()" ng-disabled="editForm.$invalid || isSaving" data-dismiss="modal">ADD</button>
+        <button type="submit" class="btn btn-skin" ng-click="submitForm()" ng-disabled="editForm.$invalid || isSaving" data-dismiss="#addModal">ADD</button>
       </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-skin" data-dismiss="modal">ADD</button>
-      </div> -->
     </div>
 
   </div>

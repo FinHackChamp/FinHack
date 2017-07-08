@@ -40,6 +40,9 @@ socket.emit('coupon', function(data) {
   prediction = data;
 });
 
+var scanTran;
+
+//Currently use static labels
 var labels = ['Beauty', 'Beverages', 'Education', 'Media', 'Grocery', 'Stationary',
 'Investment', 'Dining', 'Transport', 'Entertainment', 'Clothing'];
 
@@ -224,5 +227,8 @@ finhackApp.controller('AddCtrl', ['$scope', function($scope) {
       time: $scope.addTime
     });
     //console.log("Pushed", transData);
+  };
+  $scope.showScanPane = function() {
+    $scope.useScan = true;
   };
 }]);
