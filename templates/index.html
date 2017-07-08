@@ -38,13 +38,17 @@
 
     <script src="js/main.js"></script>
     <script src="js/todo.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
-    <script> 
-         var socket = io();
-         socket.on('receipt', function(response){
-            console.log(response);
-         }) ;      
-         console.log('abc');
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket = io.connect('http://localhost:5009' );
+        socket.on('connect', function() {
+            socket.emit('my event', {data: 'I\'m connected!'});
+            console.log('abc')
+        });
+        socket.on('receipt',function(message){
+            console.log(message)
+        })
+
     </script>
 </body>
 </html>

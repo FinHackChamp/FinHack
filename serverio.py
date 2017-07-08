@@ -12,7 +12,6 @@ socketio = SocketIO(app)
 from flask import request
 from flask_socketio import send, emit
 from os import environ
-from flask import request
 import re
 
 
@@ -65,22 +64,25 @@ def api_facility():
 
 	socketio.emit('api_facility',{'action': action, 'facility' : facility})
 	return render_template("hotel.html")
+@socketio.on('connect')
+def connect():
+	@app.route('/api/OCR', methods = ['POST'])
+	def OCR():
+	
+		f = request.files['image']
+		f.save(secure_filename('receipt.jpg'))
+		print (ocr_space_file(filename='receipt.jpg').split('\r\n'), file=sys.stderr)
+		# print (request.files['image'], file= sys.stderr)
+		floatList = []
+		for word in ocr_space_file(filename='receipt.jpg').split('\r\n'):
+			if is_number(word):
+				floatList.append(float(word))
+			print (word)
+		total = max(floatList)
+		print (total	)	
+		socketio.emit('receipt', {'total': total})
+		return render_template("index.html")
 
-@app.route('/api/OCR', methods = ['POST'])
-def OCR():
-	f = request.files['image']
-	f.save(secure_filename('receipt.jpg'))
-	print (ocr_space_file(filename='receipt.jpg').split('\r\n'), file=sys.stderr)
-	# print (request.files['image'], file= sys.stderr)
-	floatList = []
-	for word in ocr_space_file(filename='receipt.jpg').split('\r\n'):
-		if is_number(word):
-			floatList.append(float(word))
-		print (word)
-	total = max(floatList)
-	print (total	)	
-	socketio.emit('receipt', {'total': total})
-	return render_template("index.html")
 @app.route('/')
 def index():
 	return render_template("index.html")
