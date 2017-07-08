@@ -325,7 +325,7 @@ def train():
                 if((i+1) % FLAGS.evaluation_interval == 0):
                     print "Save variables to disk"
                     
-    saver = tf.train.Saver()
-    saver.save(session, 'user_model',global_step=1000)
+            saver = tf.train.Saver()
+            saver.save(session, 'user_model',global_step=1000)
 if __name__ == "__main__":
     train()
