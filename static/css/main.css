@@ -183,7 +183,7 @@ a:focus {
 .modal-input input[type="time"],
 .modal-input input[type="url"],
 .modal-input textarea,
-.modal-input select 
+.modal-input select
 {
     -webkit-transition: all 0.30s ease-in-out;
     -moz-transition: all 0.30s ease-in-out;
@@ -263,8 +263,7 @@ Navigation
 
 .navbar {
     margin-bottom: 0;
-    border-bottom: 1px solid rgba(255,255,255,.3);	
-	
+    border-bottom: 1px solid rgba(255,255,255,.3);
 }
 
 
@@ -314,7 +313,6 @@ Navigation
 
 .navbar.navbar-custom.top-nav-collapse {
 	background: #fff;
-	
 }
 
 .navbar-custom.top-nav-collapse ul.nav li a {
@@ -325,7 +323,7 @@ Navigation
 }
 
 .navbar-custom ul.nav ul.dropdown-menu {
-	border-radius: 0;	
+	border-radius: 0;
 	margin-top: 16px;
 }
 
@@ -387,27 +385,27 @@ Navigation
 
 
 /* loader */
-#page-loader { 
-	position: fixed; 
-	top: 0; 
-	left: 0; 
-	height: 100%; 
-	width: 100%; 
-	background: white; 
-	z-index: 9999; 
+#page-loader {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background: white;
+	z-index: 9999;
 }
 #page-loader img {
-	margin: 100px auto; 
+	margin: 100px auto;
 	display: block;
 }
 
-.loader { 
-	text-align: center; 
-	margin: auto; 
-	position: absolute; 
-	top: 0; 
-	bottom: 0; 
-	left: 0; 
+.loader {
+	text-align: center;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
 	right: 0;
 	height: 40px;
 }
@@ -736,19 +734,19 @@ ul.social li {
 
 .icon-primary {
 	color: #4765a0;
-}	
+}
 .icon-success {
 	color: #7db53b;
-}	
+}
 .icon-info {
 	color: #51b6bf;
-}	
+}
 .icon-warning {
 	color: #e6e039;
-}	
+}
 .icon-danger {
 	color: #e24e47;
-}	
+}
 
 
 /* scroll to top */
@@ -759,9 +757,9 @@ ul.social li {
     bottom:0px;
     right:20px;
 	background: #222;
--webkit-border-radius: 2px 2px 0 0;	
-	-moz-border-radius: 2px 2px 0 0;	
-	border-radius:  2px 2px 0 0;	
+-webkit-border-radius: 2px 2px 0 0;
+	-moz-border-radius: 2px 2px 0 0;
+	border-radius:  2px 2px 0 0;
 }
 
 a.scrollup {
@@ -814,7 +812,7 @@ a.scrollup i:hover {
     -moz-animation-timing-function: linear;
 }
 
-@-webkit-keyframes pulse {    
+@-webkit-keyframes pulse {
     0 {
         -webkit-transform: scale(1);
         transform: scale(1);
@@ -831,7 +829,7 @@ a.scrollup i:hover {
     }
 }
 
-@-moz-keyframes pulse {    
+@-moz-keyframes pulse {
     0 {
         -moz-transform: scale(1);
         transform: scale(1);
@@ -923,11 +921,10 @@ input[type="radio"].toggle:checked + label:after {
 	text-decoration: none;
 	text-transform: uppercase;
 	letter-spacing: 1px;
-	font-weight: 400;	
+	font-weight: 400;
 	text-shadow: 0 0 1px rgba(255,255,255,0.3);
 	/*font-size: 14px;*/
 	font-weight: 700;
-	
 }
 
 .btn.btn-noradius {
