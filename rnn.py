@@ -82,25 +82,25 @@ class UserModel(object):
         final_hidden_size = self.state_size[-1]
 
         hidden_layers = []
-        
+
         for i in range(self.hidden_layer_num):
-            
+
             hidden1 = tf.contrib.rnn.BasicLSTMCell(self.state_size[i], state_is_tuple=True,reuse=tf.get_variable_scope().reuse)
             if is_training and config.keep_prob < 1:
                 hidden1 = tf.contrib.rnn.DropoutWrapper(hidden1, output_keep_prob=FLAGS.keep_prob)
             hidden_layers.append(hidden1)
-        
+
         cell = tf.contrib.rnn.MultiRNNCell(hidden_layers, state_is_tuple=True)
 
-        
+
         x = inputs
-        
+
         print x
         outputs, state = tf.nn.dynamic_rnn(cell, x, dtype=tf.float32)
         # print state
         #output = [batch_size * num_steps, final_hidden_size]
         output = tf.reshape(tf.concat(outputs,1), [-1, final_hidden_size])
-       
+
         # calculate the logits from last hidden layer to output layer
         # graph.get_tensor_by_name("op_to_restore:0")
         sigmoid_w = tf.get_variable("sigmoid_w", [final_hidden_size, num_skills])
@@ -109,20 +109,20 @@ class UserModel(object):
             sigmoid_w = graph.get_tensor_by_name("model/sigmoid_w:0")
             sigmoid_b = graph.get_tensor_by_name("model/sigmoid_b:0")
         logits = tf.matmul(output, sigmoid_w) + sigmoid_b
-        
+
         self._logits = logits
         print logits
         softmaxed_logits = tf.nn.softmax(logits)
-        
+
         #make prediction
         self._pred = self._pred_values = pred_values = softmaxed_logits
         self._pred_class = tf.argmax(softmaxed_logits, axis = 1)
-        
+
         print self.pred
         # loss function
         loss = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(logits = logits,labels= target_correctness))
 
-       
+
         self._final_state = state
         self._cost = cost = loss
 
@@ -171,7 +171,7 @@ class UserModel(object):
     def final_state(self):
         return self._final_state
 
-    @property 
+    @property
     def pred_class(self):
         return self._pred_class
 
@@ -189,7 +189,7 @@ class HyperParamsConfig(object):
 def run_epoch(session, m, students, eval_op, verbose=False):
     """Runs the model on the given data."""
     start_time = time.time()
-  
+
     index = 0
     pred_labels = []
     actual_labels = []
@@ -198,7 +198,7 @@ def run_epoch(session, m, students, eval_op, verbose=False):
     for i in range(int(students.shape[0] / m.batch_size)):
     	target_id = []
     	target_correctness = []
-    	
+
     	x = students[i*m.batch_size: (i+1) * m.batch_size,:-1,:]
     	for b in range(m.batch_size):
         	for s in range(m.num_steps-1):
@@ -218,13 +218,13 @@ def run_epoch(session, m, students, eval_op, verbose=False):
             if i == 0: continue
             h = np.concatenate((h,final_state[i][1]), axis=1)
         index += m.batch_size
-        
+
 
         for p in pred:
             pred_labels.append(p)
         for p in pred_class:
             pred_classes.append(p)
-   
+
     # print final_state[0][0].shape
     print np.array(pred_labels).shape
     print np.array(actual_labels).shape
@@ -247,7 +247,7 @@ def run_epoch(session, m, students, eval_op, verbose=False):
 
 
 def train():
-    
+
 
     config = HyperParamsConfig()
     config.isTrain = True
@@ -260,19 +260,19 @@ def train():
     #the file to store your test results
     result_file_path = "run_logs_{}".format(timestamp)
 
-   
+
 
     train_max_num_problems, train_max_skill_num = (40, 150)
     train_students = np.load('oneHotEncoded.npy')
     config.num_steps = train_max_num_problems
-    
+
     config.num_skills = train_max_skill_num
     # test_students, test_max_num_problems, test_max_skill_num = read_data_from_csv_file(test_data_path)
     # eval_config.num_steps = test_max_num_problems
     # eval_config.num_skills = test_max_skill_num
-    
+
     with tf.Graph().as_default() as g:
-        
+
         session_conf = tf.ConfigProto(allow_soft_placement=FLAGS.allow_soft_placement,
                                       log_device_placement=FLAGS.log_device_placement)
 
@@ -281,18 +281,18 @@ def train():
         starter_learning_rate = FLAGS.learning_rate
         learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, 3000, 0.96, staircase=True)
 
-        
+
 
         with tf.Session(config=session_conf) as session:
-            
+
             initializer = tf.random_uniform_initializer(-config.init_scale, config.init_scale)
-            
-              
-            
+
+
+
             # training model
             with tf.variable_scope("model", reuse=None, initializer=initializer):
 
-                
+
                 m = UserModel(is_training=True, config=config, graph=g)
             optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon=FLAGS.epsilon)
             # # testing model
@@ -309,9 +309,9 @@ def train():
             # print "--------------------"
             # saver = tf.train.import_meta_graph('user_model-1000.meta')
 
-            # saver.restore(session,tf.train.latest_checkpoint('./')) 
+            # saver.restore(session,tf.train.latest_checkpoint('./'))
             # print tf.get_collection(tf.GraphKeys.VARIABLES, scope='model')
-            # print(session.run('model/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/biases/Adam:0'))   
+            # print(session.run('model/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/biases/Adam:0'))
             # log hyperparameters to results file
             with open(result_file_path, "a+") as f:
                 print("Writing hyperparameters into file")
@@ -330,11 +330,11 @@ def train():
                     f.write("Epoch: %d Train Metrics:\n rmse: %.3f \t auc: %.3f \t r2: %.3f \n" % (i + 1, rmse, accuracy, r2))
                 if((i+1) % FLAGS.evaluation_interval == 0):
                     print "Save variables to disk"
-                    
+
             saver = tf.train.Saver()
             saver.save(session, 'user_model',global_step=1000)
 def predict():
-    
+
     config = HyperParamsConfig()
     config.isTrain = False
     config.batch_size = 1
@@ -346,25 +346,25 @@ def predict():
     test_data_path = FLAGS.test_data_path
     #the file to store your test results
     result_file_path = "run_logs_{}".format(timestamp)
-  
-    
+
+
 
     train_max_num_problems, train_max_skill_num = (40, 150)
     train_students = np.array([np.load('oneHotEncoded.npy')[np.random.randint(2975),:,:]])
     # train_students = np.load('oneHotEncoded.npy')
     config.num_steps = train_max_num_problems
-    
+
     config.num_skills = train_max_skill_num
     # test_students, test_max_num_problems, test_max_skill_num = read_data_from_csv_file(test_data_path)
     # eval_config.num_steps = test_max_num_problems
     # eval_config.num_skills = test_max_skill_num
     new_graph = tf.Graph()
-  
-        
-   
-    
+
+
+
+
     with new_graph.as_default():
-        
+
         session_conf = tf.ConfigProto(allow_soft_placement=FLAGS.allow_soft_placement,
                                   log_device_placement=FLAGS.log_device_placement)
 
@@ -372,15 +372,15 @@ def predict():
         # decay learning rate
         starter_learning_rate = FLAGS.learning_rate
         with tf.Session(graph = new_graph) as session:
-             
+
             initializer = tf.random_uniform_initializer(-config.init_scale, config.init_scale)
-            
+
             learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, 3000, 0.96, staircase=True)
-            
+
             # training model
-            with tf.variable_scope("model", reuse=None, initializer=initializer):   
+            with tf.variable_scope("model", reuse=None, initializer=initializer):
                 m = UserModel(is_training=True, config=config, graph = new_graph)
-            
+
             optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon=FLAGS.epsilon)
             # # testing model
             # with tf.variable_scope("model", reuse=True, initializer=initializer):
@@ -396,16 +396,16 @@ def predict():
             saver.restore(session,tf.train.latest_checkpoint('./'))
             # print tf.get_collection(tf.GraphKeys.VARIABLES, scope='model')
             # print "--------------------"
-            
+
             # print tf.get_collection(tf.GraphKeys.VARIABLES, scope='model')
-            # print(session.run('model/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/biases/Adam:0'))   
+            # print(session.run('model/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/biases/Adam:0'))
             # log hyperparameters to results file
-            
+
             # saver = tf.train.Saver(tf.all_variables())
 
             cs = []
             hs = []
-            
+
             rmse, accuracy, r2, final_state, last_logit = run_epoch(session, m, train_students, train_op, verbose=True)
             output = []
             output.append(np.argmax(last_logit))
@@ -419,10 +419,9 @@ def predict():
             return output
 
 
-if __name__ == "__main__":
-    # train()
-    print predict()
+
+# if __name__ == "__main__":
+#     print()
+#     # train()
+
     # train(train= False)
-    
-
-

@@ -1,5 +1,6 @@
 var finhackApp = angular.module('finhackApp', ['ui.router']);
 
+
 compData = [];
 
 //Todo: Test this data
@@ -28,6 +29,12 @@ socket.emit('getComparison', {name: 'Charles Davis', criteria: 'salary', target:
 
 });
   */
+
+var prediction;
+socket.emit('coupon', function(data) {
+    prediction = data;
+  });
+
 finhackApp.config(function($stateProvider) {
   $stateProvider.state('home', {
     url: '/',
@@ -51,7 +58,8 @@ finhackApp.config(function($stateProvider) {
     url: '/coupon',
     views: {
       content: {
-        templateUrl: '/static/partials/coupon.html'
+        templateUrl: '/static/partials/coupon.html',
+        controller: 'CouponCtrl'
       }
     }
   })
@@ -163,6 +171,12 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
       }]
     }
   });
+}]);
+
+finhackApp.controller('CouponCtrl', ['$scope', function($scope) {
+
+  $scope.prediction = prediction
+
 }]);
 
 finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {

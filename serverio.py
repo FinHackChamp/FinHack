@@ -1,6 +1,9 @@
 from __future__ import print_function
-from flask import Flask, render_template,request
+
+from flask import Flask, render_template,request, redirect
 from flask_socketio import SocketIO
+import os
+
 import transaction_retriever
 from werkzeug import secure_filename
 from OCR import *
@@ -14,14 +17,16 @@ from flask_socketio import send, emit
 from os import environ
 import re
 
+from rnn import *
 
 
 def is_number(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
+	try:
+		float(s)
+		return True
+	except ValueError:
+		return False
+
 
 @socketio.on('message')
 def handle_message(message):
@@ -71,7 +76,9 @@ def connect():
 
 		f = request.files['image']
 		f.save(secure_filename('receipt.jpg'))
+
 		print (ocr_space_file(filename='receipt.jpg').split('\r\n'), file=sys.stderr)
+
 		# print (request.files['image'], file= sys.stderr)
 		floatList = []
 		for word in ocr_space_file(filename='receipt.jpg').split('\r\n'):
@@ -81,15 +88,21 @@ def connect():
 		total = max(floatList)
 		print (total	)
 		socketio.emit('receipt', {'total': total})
-		return render_template("index.html")
+		return redirect('/')
 
 @socketio.on('getPersonalAnalysis')
-def handleAnalysis(message):
-    return getPersonalAnalysis(message['name'])
+def handleAnalysis(name):
+	print (getPersonalAnalysis(name))
 
 @socketio.on('getComparison')
-def handleComparison(message):
-    return getComparison(message['name'], message['criteria'])
+def handleComparison(name, criteria):
+	return getComparison(name, criteria)
+
+@socketio.on('coupon')
+def coupon():
+	print(predict())
+	return predict()
+
 
 @app.route('/')
 def index():
@@ -103,6 +116,5 @@ if __name__ == '__main__':
 		PORT = 5009
 
 	print('server running on ' + str(PORT), file=sys.stderr)
-    #os.system("python transaction_retriever.py")
-    #print('File loaded.')
+
 	socketio.run(app, port =  PORT, host= '0.0.0.0')
