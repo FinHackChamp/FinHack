@@ -2,7 +2,6 @@ var finhackApp = angular.module('finhackApp', ['ui.router']);
 
 var transData;
 socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: true, label: 'None'}, function(data) {
-  console.log("1", data);
   transData = data;
 });
 
