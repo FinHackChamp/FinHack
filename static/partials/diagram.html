@@ -1,0 +1,15 @@
+<div id="monthlyDiagram" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+<table ng-if="drilledDown">
+  <tr>
+    <th>Time</th>
+    <th>Company</th>
+    <th>Label</th>
+    <th>Amount</th>
+  </tr>
+  <tr ng-repeat="record in recordList">
+    <td>{{record.time | date:'yyyy-MMM-dd'}}</td>
+    <td>{{record.company}}</td>
+    <td>{{record.label}}</td>
+    <td>{{record.amount}}</td>
+  </tr>
+</table>

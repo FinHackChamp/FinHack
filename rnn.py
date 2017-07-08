@@ -22,8 +22,10 @@ step_size = 40
 batch_size = 5
 
 # (2975, 40, 150)
-train_data = np.load('ontHotEncoded.npy')
+train_data = np.load('oneHotEncoded.npy')
 sample = None
+
+
 # flags
 tf.flags.DEFINE_float("epsilon", 0.1, "Epsilon value for Adam Optimizer.")
 tf.flags.DEFINE_float("l2_lambda", 0.3, "Lambda for l2 loss.")
@@ -58,14 +60,14 @@ def add_gradient_noise(t, stddev=1e-3, name=None):
     The output will be `t` + gaussian noise.
     0.001 was said to be a good fixed value for memory networks [2].
     """
-    with tf.op_scope([t, stddev], name, "add_gradient_noise") as name:
+    with tf.name_scope( name, "add_gradient_noise",[t, stddev]) as name:
         t = tf.convert_to_tensor(t, name="t")
         gn = tf.random_normal(tf.shape(t), stddev=stddev)
         return tf.add(t, gn, name=name)
 
 class UserModel(object):
 
-    def __init__(self, is_training, config):
+    def __init__(self, is_training, config, graph):
         self.state_size = config.state_size
         self._batch_size = batch_size = config.batch_size
         self.num_skills = num_skills = config.num_skills
@@ -100,14 +102,15 @@ class UserModel(object):
         output = tf.reshape(tf.concat(outputs,1), [-1, final_hidden_size])
        
         # calculate the logits from last hidden layer to output layer
-
+        # graph.get_tensor_by_name("op_to_restore:0")
         sigmoid_w = tf.get_variable("sigmoid_w", [final_hidden_size, num_skills])
         sigmoid_b = tf.get_variable("sigmoid_b", [num_skills])
-
-        
+        if config.isTrain == False:
+            sigmoid_w = graph.get_tensor_by_name("model/sigmoid_w:0")
+            sigmoid_b = graph.get_tensor_by_name("model/sigmoid_b:0")
         logits = tf.matmul(output, sigmoid_w) + sigmoid_b
         
- 
+        self._logits = logits
         print logits
         softmaxed_logits = tf.nn.softmax(logits)
         
@@ -138,6 +141,11 @@ class UserModel(object):
     @property
     def pred(self):
         return self._pred
+
+    @property
+    def logits(self):
+        return self._logits
+
 
     @property
     def target_id(self):
@@ -177,6 +185,7 @@ class HyperParamsConfig(object):
     num_skills = 0
     state_size = [200]
     batch_size = 32
+    isTrain = True
 def run_epoch(session, m, students, eval_op, verbose=False):
     """Runs the model on the given data."""
     start_time = time.time()
@@ -185,27 +194,7 @@ def run_epoch(session, m, students, eval_op, verbose=False):
     pred_labels = []
     actual_labels = []
     pred_classes= []
-    # while(index+m.batch_size < students.shape[0]):
-    #     x = np.zeros((m.batch_size, m.num_steps))
-    #     target_id = []
-    #     target_correctness = []
-    #     count = 0
-
-    #     for i in range(m.batch_size):
-    #         student = students[index+i]
-    #         problem_ids = student[1]
-    #         correctness = student[2]
-    #         for j in range(len(problem_ids)-1):
-    #             problem_id = int(problem_ids[j])
-    #             label_index = 0
-    #             if(int(correctness[j]) == 0):
-    #                 label_index = problem_id
-    #             else:
-    #                 label_index = problem_id + m.num_skills
-    #             x[i, j] = label_index
-    #             target_id.append(i*m.num_steps*m.num_skills+j*m.num_skills+int(problem_ids[j+1]))
-    #             target_correctness.append(int(correctness[j+1]))
-    #             actual_labels.append(int(correctness[j+1]))
+    last_logit = None
     for i in range(int(students.shape[0] / m.batch_size)):
     	target_id = []
     	target_correctness = []
@@ -220,7 +209,7 @@ def run_epoch(session, m, students, eval_op, verbose=False):
         		# print target_id
         		target_correctness.append(students[b][s+1])
         		actual_labels.append(students[b][s+1])
-        pred, _, final_state, pred_class = session.run([m.pred, eval_op, m.final_state, m.pred_class], feed_dict={
+        pred, _, final_state, pred_class, last_logit  = session.run([m.pred, eval_op, m.final_state, m.pred_class, m.logits], feed_dict={
             m.input_data: x, m.target_correctness: target_correctness})
         #h: [batch_size, num_unit]
 
@@ -249,16 +238,20 @@ def run_epoch(session, m, students, eval_op, verbose=False):
     rmse = sqrt(mean_squared_error(actual_labels, pred_labels))
     # fpr, tpr, thresholds = metrics.roc_curve(actual_labels, pred_labels, pos_label=1)
     # auc = metrics.auc(fpr, tpr)
+    last_logit = last_logit[-1, :]
 
     #calculate r^2
     r2 = r2_score(actual_labels, pred_labels)
-    return rmse, accuracy, r2, final_state, pred_classes
+    return rmse, accuracy, r2, final_state, last_logit
 
 
 
 def train():
     
+
     config = HyperParamsConfig()
+    config.isTrain = True
+    config.batch_size = 32
     eval_config = HyperParamsConfig()
     timestamp = str(time.time())
     train_data_path = FLAGS.train_data_path
@@ -266,19 +259,20 @@ def train():
     test_data_path = FLAGS.test_data_path
     #the file to store your test results
     result_file_path = "run_logs_{}".format(timestamp)
-    #your model name
-    model_name = "DKT"
+
+   
 
     train_max_num_problems, train_max_skill_num = (40, 150)
-    train_students = np.load('ontHotEncoded.npy')
+    train_students = np.load('oneHotEncoded.npy')
     config.num_steps = train_max_num_problems
     
     config.num_skills = train_max_skill_num
     # test_students, test_max_num_problems, test_max_skill_num = read_data_from_csv_file(test_data_path)
     # eval_config.num_steps = test_max_num_problems
     # eval_config.num_skills = test_max_skill_num
-
-    with tf.Graph().as_default():
+    
+    with tf.Graph().as_default() as g:
+        
         session_conf = tf.ConfigProto(allow_soft_placement=FLAGS.allow_soft_placement,
                                       log_device_placement=FLAGS.log_device_placement)
 
@@ -287,15 +281,20 @@ def train():
         starter_learning_rate = FLAGS.learning_rate
         learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, 3000, 0.96, staircase=True)
 
-        optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon=FLAGS.epsilon)
+        
 
         with tf.Session(config=session_conf) as session:
-
+            
             initializer = tf.random_uniform_initializer(-config.init_scale, config.init_scale)
-
+            
+              
+            
             # training model
             with tf.variable_scope("model", reuse=None, initializer=initializer):
-                m = UserModel(is_training=True, config=config)
+
+                
+                m = UserModel(is_training=True, config=config, graph=g)
+            optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon=FLAGS.epsilon)
             # # testing model
             # with tf.variable_scope("model", reuse=True, initializer=initializer):
             #     mtest = UserModel(is_training=False, config=eval_config)
@@ -306,6 +305,13 @@ def train():
             grads_and_vars = [(add_gradient_noise(g), v) for g, v in grads_and_vars]
             train_op = optimizer.apply_gradients(grads_and_vars, name="train_op", global_step=global_step)
             session.run(tf.global_variables_initializer())
+            # print tf.get_collection(tf.GraphKeys.VARIABLES, scope='model')
+            # print "--------------------"
+            # saver = tf.train.import_meta_graph('user_model-1000.meta')
+
+            # saver.restore(session,tf.train.latest_checkpoint('./')) 
+            # print tf.get_collection(tf.GraphKeys.VARIABLES, scope='model')
+            # print(session.run('model/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/biases/Adam:0'))   
             # log hyperparameters to results file
             with open(result_file_path, "a+") as f:
                 print("Writing hyperparameters into file")
@@ -327,5 +333,96 @@ def train():
                     
             saver = tf.train.Saver()
             saver.save(session, 'user_model',global_step=1000)
+def predict():
+    
+    config = HyperParamsConfig()
+    config.isTrain = False
+    config.batch_size = 1
+
+    eval_config = HyperParamsConfig()
+    timestamp = str(time.time())
+    train_data_path = FLAGS.train_data_path
+    #path to your test data set
+    test_data_path = FLAGS.test_data_path
+    #the file to store your test results
+    result_file_path = "run_logs_{}".format(timestamp)
+  
+    
+
+    train_max_num_problems, train_max_skill_num = (40, 150)
+    train_students = np.array([np.load('oneHotEncoded.npy')[np.random.randint(2975),:,:]])
+    # train_students = np.load('oneHotEncoded.npy')
+    config.num_steps = train_max_num_problems
+    
+    config.num_skills = train_max_skill_num
+    # test_students, test_max_num_problems, test_max_skill_num = read_data_from_csv_file(test_data_path)
+    # eval_config.num_steps = test_max_num_problems
+    # eval_config.num_skills = test_max_skill_num
+    new_graph = tf.Graph()
+  
+        
+   
+    
+    with new_graph.as_default():
+        
+        session_conf = tf.ConfigProto(allow_soft_placement=FLAGS.allow_soft_placement,
+                                  log_device_placement=FLAGS.log_device_placement)
+
+        global_step = tf.Variable(0, name="global_step", trainable=False)
+        # decay learning rate
+        starter_learning_rate = FLAGS.learning_rate
+        with tf.Session(graph = new_graph) as session:
+             
+            initializer = tf.random_uniform_initializer(-config.init_scale, config.init_scale)
+            
+            learning_rate = tf.train.exponential_decay(starter_learning_rate, global_step, 3000, 0.96, staircase=True)
+            
+            # training model
+            with tf.variable_scope("model", reuse=None, initializer=initializer):   
+                m = UserModel(is_training=True, config=config, graph = new_graph)
+            
+            optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, epsilon=FLAGS.epsilon)
+            # # testing model
+            # with tf.variable_scope("model", reuse=True, initializer=initializer):
+            #     mtest = UserModel(is_training=False, config=eval_config)
+
+            grads_and_vars = optimizer.compute_gradients(m.cost)
+            grads_and_vars = [(tf.clip_by_norm(g, FLAGS.max_grad_norm), v)
+                              for g, v in grads_and_vars if g is not None]
+            grads_and_vars = [(add_gradient_noise(g), v) for g, v in grads_and_vars]
+            train_op = optimizer.apply_gradients(grads_and_vars, name="train_op1", global_step=global_step)
+            session.run(tf.global_variables_initializer())
+            saver = tf.train.import_meta_graph('user_model-1000.meta')
+            saver.restore(session,tf.train.latest_checkpoint('./'))
+            # print tf.get_collection(tf.GraphKeys.VARIABLES, scope='model')
+            # print "--------------------"
+            
+            # print tf.get_collection(tf.GraphKeys.VARIABLES, scope='model')
+            # print(session.run('model/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/biases/Adam:0'))   
+            # log hyperparameters to results file
+            
+            # saver = tf.train.Saver(tf.all_variables())
+
+            cs = []
+            hs = []
+            
+            rmse, accuracy, r2, final_state, last_logit = run_epoch(session, m, train_students, train_op, verbose=True)
+            output = []
+            output.append(np.argmax(last_logit))
+            last_logit[output[-1]] = min(last_logit)
+            output.append(np.argmax(last_logit))
+            last_logit[output[-1]] = min(last_logit)
+            output.append(np.argmax(last_logit))
+            df = pd.read_csv('label.csv')
+            names = list(df.name)
+            output = [names[index] for index in output]
+            return output
+
+
 if __name__ == "__main__":
-    train()
+    # train()
+    print predict()
+    # train(train= False)
+    
+
+
