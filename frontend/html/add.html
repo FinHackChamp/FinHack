@@ -1,4 +1,6 @@
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add New</button>
+
+
+<button type="button" class="btn btn-skin btn-lg" data-toggle="modal" data-target="#myModal">Add New</button>
 
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
@@ -8,16 +10,19 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title">Add New Trans</h4>
       </div>
       <div class="modal-body">
         <form>
-          <div>
-            <input type="radio" name="addNew" value="expense" checked/>Expense
-            <input type="radio" name="addNew" value="income"/>Income
+         <div class = 'input-radio'>
+           <input id="toggle-on" class="toggle toggle-left" name="toggle" value="false" type="radio" checked>
+          <label for="toggle-on" class="btn-toggle">Expense</label>
+          <input id="toggle-off" class="toggle toggle-right" name="toggle" value="true" type="radio">
+          <label for="toggle-off" class="btn-toggle">Income</label>
+          <p>                      </p>              
           </div>
-          <div>
-            <label>Amount</label>
+          <div class = 'modal-input'>
+            <label style="background:#b6c0c9;" >Amount</label>
             <input name="someid" type="number" onkeypress="return isNumberKey(event)"/><!--<p>HKD</p>-->
             <script>
               $(function isNumberKey(evt){
@@ -29,16 +34,16 @@
               );
             </script>
           </div>
-          <div>
-            <label>Account</label>
+          <div class = 'modal-input'>
+            <label style ="background: #cbdbda; ">Account</label>
             <!--<input type="text" />-->
             <select>
               <option value ="Mastercard">Mastercard 5566</option>
               <option value = "Wallet">My Wallet</option>
             </select>
           </div>
-          <div>
-            <label>Category</label>
+          <div class = 'modal-input'>
+            <label style="background: #b6c0c9;">Category</label>
              <select>
                <option value ="1">Beauty</option>
                 <option value = "2">Beverages</option>
@@ -51,32 +56,32 @@
                 <option value = "9">Transport</option>
                 <option value = "10">Entertainment</option>
                 <Option value = "11">Clothing</Option>
+                <span style="display:inline-block; width: YOURWIDTH;"></span>
              </select>
             <!--select-->
-            <input type="text" onkeypress='validate(event)' />
+            <!-- <input type="text" onkeypress='validate(event)' /> -->
           </div>
-          <div>
-            <label>Date</label>
+          <div class = 'modal-input'>
+            <label style="background: #afafbf;">Date</label>
             <input type ="date" id ="datepicker" >
-              <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+              <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
               <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
               <script>
                 $( function() {
                   $( "#datepicker" ).datepicker();
                    } );
-              </script>
-          <div>
-            <label>Description</label>
+              </script> -->
+          <div class = 'modal-input'>
+            <label style ="background: #b6c0c9; ">Description</label>
             <input type="text" />
           </div>
 
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-skin" data-dismiss="modal">ADD</button>
       </div>
     </div>
 
   </div>
 </div>
-
