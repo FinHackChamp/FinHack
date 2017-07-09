@@ -1,44 +1,45 @@
+//Currently use static labels
+var labels = ['Beauty', 'Education', 'Media', 'Grocery', 'Stationery',
+'Investment', 'Dining', 'Transport', 'Entertainment', 'Clothing'];
+
 var finhackApp = angular.module('finhackApp', ['ui.router']);
 
 var transData;
 socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: true, label: 'None'}, function(data) {
-  console.log(data);
+  //console.log(data);
   transData = data;
 });
 
-var compData;
 var totalPrice;
 socket.on('receipt', function(response){
   console.log(response);
   totalPrice = response;
 });
 
-//Todo: Test this data
-/*
-socket.emit('getComparison', {name: 'Charles Davis', criteria: 'age', target: 'percentage'}, function(data) {
-  console.log(data);
-
-  compData['age'] = data;
-  for (int i = 0; i < data.length; i++) {
-    compData['otherage'][i] = 1 - data[i];
-  }
-  console.log(compData['otherage']);
-
+var compData= {};
+var ageGenderList = {'You':[], 'Other':[]};
+var ageSalaryList = {'You':[], 'Other':[]};
+$.getJSON("static/json/ageGender.json", function(json) {
+  // compData = json;
+  labels.forEach(function(label) {
+    percentage = json[label]['percentage'];
+    ageGenderList['You'].push(percentage);
+    ageGenderList['Other'].push(1 - percentage);
+  })
 });
-*/
-//Todo: Test this data
-/*
-socket.emit('getComparison', {name: 'Charles Davis', criteria: 'salary', target: 'percentage'}, function(data) {
-  console.log(data);
 
-  compData['salary'] = data;
-  for (int i = 0; i < data.length; i++) {
-    compData['othersalary'][i] = 1 - data[i];
-  }
-  console.log(compData['othersalary']);
+$.getJSON("static/json/ageSalary.json", function(json) {
+  //console.log(json);
+  // compData = json;
+  labels.forEach(function(label) {
 
+    percentage = json[label]['percentage']
+    ageSalaryList['You'].push(percentage)
+    ageSalaryList['Other'].push(1 - percentage)
+  })
 });
-  */
+compData['age'] = ageGenderList;
+compData['salary'] = ageSalaryList;
 
 var prediction;
 socket.emit('coupon', function(data) {
@@ -47,9 +48,7 @@ socket.emit('coupon', function(data) {
 
 var scanTran;
 
-//Currently use static labels
-var labels = ['Beauty', 'Beverages', 'Education', 'Media', 'Grocery', 'Stationary',
-'Investment', 'Dining', 'Transport', 'Entertainment', 'Clothing'];
+
 
 finhackApp.config(function($stateProvider) {
   $stateProvider.state('home', {
@@ -76,6 +75,22 @@ finhackApp.config(function($stateProvider) {
       content: {
         templateUrl: '/static/partials/coupon.html',
         controller: 'CouponCtrl'
+      }
+    }
+  })
+  .state('connect', {
+    url: '/connect',
+    views: {
+      content: {
+        templateUrl: 'static/partials/creditcard.html'
+      }
+    }
+  })
+  .state('login', {
+    url: '/login',
+    views: {
+      content: {
+        templateUrl: 'static/html/login.html'
       }
     }
   });
@@ -106,14 +121,14 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
 
   //Todo: Change the name to user name!
   socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: false, label: 'None'}, function(data) {
-    console.log(data);
+    //console.log(data);
     monthlyData = data;
     monthlyDiagram.addSeries({
         name: title,
         data: data
     });
   });
-  $scope.transData = transData;
+  $scope.localTransData = transData;
   $scope.labels = labels;
   function showTable (label) {
     $scope.drilledDown = true;
@@ -121,7 +136,7 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
 
     //Todo: get transaction data by category
     $scope.recordList = transData[label];
-    console.log("recordList", transData[label]);
+    //console.log("recordList", transData[label]);
   }
 
   monthlyDiagram = Highcharts.chart('monthlyDiagram', {
@@ -132,9 +147,9 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
       type: 'pie',
       events: {
         drilldown: function(e) {
-          console.log(e.point.name);
+          //console.log(e.point.name);
           socket.emit('getPersonalAnalysis', {name: 'Charles Davis', detail: false, label: e.point.name}, function(data) {
-            console.log("2", data[0][0]);
+            //console.log("2", data[0][0]);
             monthlyDiagram.addSeriesAsDrilldown(e.point, data[0][0]);
           });
           $scope.chosenLabel = e.point.name;
@@ -154,8 +169,8 @@ finhackApp.controller('DiagramCtrl', ['$scope', function($scope) {
     tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
     },
-    colors: ['#DAB6C4', '#7B886F', '#B4DC7F', '#FEFFA5', '#FFA0AC', '#ED6A5A', '#F4F1BB',
-    '#9BC1BC', '#5CA4A9', '#FFA0AC', '#E6EBE0', '#5CA4A9', '#FFE5D9', '#9D8189'],
+    colors: ['#E6EBE0', '#5CA4A9', '#FFE5D9', '#9D8189', '#FEFFA5',
+    '#FFA0AC', '#ED6A5A', '#DAB6C4', '#7B886F', '#B4DC7F'],
     plotOptions: {
         pie: {
             allowPointSelect: true,
@@ -183,20 +198,25 @@ finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
   $scope.chosenGroup = 'age';
 
   $scope.onChosenGroupChange = function() {
-    /*
-    var series = comparisonDiagram.series;
-    for (int i = 0; i < series.length(); i++) {
-      if (series[i].name == 'You') {
-        series[i].data = compData[$scope.chosenGroup];
-      } else {
-        var otherName = 'other' + $scope.chosenGroup;
-        series[i].data = compData[otherName];
-      }
-    }
-    */
     comparisonDiagram.setTitle({
       text: 'Comparison with people of your ' + $scope.chosenGroup
-    });
+    }, false);
+    var series = comparisonDiagram.series;
+    for (var i = 0; i < series.length; i++) {
+      if ($scope.chosenGroup == 'salary') {
+        if (series[i].options.id == 'ageSalaryYou' || series[i].options.id == 'ageSalaryOthers') {
+          series[i].setVisible(true);
+        } else {
+          series[i].setVisible(false);
+        }
+      } else {
+        if (series[i].options.id == 'ageGenderYou' || series[i].options.id == 'ageGenderOthers') {
+          series[i].setVisible(true);
+        } else {
+          series[i].setVisible(false);
+        }
+      }
+    }
   }
 
   comparisonDiagram = Highcharts.chart('comparisonDiagram', {
@@ -207,7 +227,7 @@ finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
         text: 'Comparison with people of your ' + $scope.chosenGroup
     },
     xAxis: {
-        categories: ['Education', 'Media', 'Investment', 'Grocery']
+        categories: labels
     },
     yAxis: {
         min: 0,
@@ -226,19 +246,42 @@ finhackApp.controller('StatisticsCtrl', ['$scope', function($scope) {
     },
     series: [{
         name: 'Others',
-        data: [0.2, 0.4, 0.8, 0.3],
+        id: 'ageSalaryOthers',
+        data: ageSalaryList['Other'],
         plotOptions: {
           enableMouseTracking: false,
           fillOpacity: 0.65
-        }
+        },
+        visible: false
     }, {
         name: 'You',
-        data: [0.8, 0.6, 0.2, 0.7],
+        id: 'ageSalaryYou',
+        data: ageSalaryList['You'],
         dataLabels: {
           enabled: true,
           align: 'right',
           format: '<b>{point.percentage:.1f}%</b>'
-        }
+        },
+        visible: false
+    },{
+        name: 'Others',
+        id: 'ageGenderOthers',
+        data: ageGenderList['Other'],
+        plotOptions: {
+          enableMouseTracking: false,
+          fillOpacity: 0.65,
+        },
+        visible: true
+    }, {
+        name: 'You',
+        id: 'ageGenderYou',
+        data: ageGenderList['You'],
+        dataLabels: {
+          enabled: true,
+          align: 'right',
+          format: '<b>{point.percentage:.1f}%</b>'
+        },
+        visible: true
     }]
   });
 }]);

@@ -8,7 +8,7 @@
   </thead>
 
   <tbody ng-repeat="label in labels">
-    <tr ng-repeat="record in transData[label]">
+    <tr ng-repeat="record in localTransData[label]">
       <td>{{record.time | date:'yyyy-MMM-dd'}}</td>
       <td>{{record.name}}</td>
       <td>{{label}}</td>
