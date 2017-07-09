@@ -90,7 +90,7 @@ finhackApp.config(function($stateProvider) {
     url: '/login',
     views: {
       content: {
-        templateUrl: 'static/html/login.html'
+        templateUrl: 'static/partials/login.html'
       }
     }
   });
